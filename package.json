@@ -1,0 +1,13 @@
+{
+  "name": "redux-saga-sandbox",
+  "version": "0.0.0",
+  "private": true,
+  "main": "index.ts",
+  "dependencies": {
+    "@types/redux-saga": "^0.10.5",
+    "eventemitter3": "^5.0.0",
+    "lighterhtml": "^4.2.0",
+    "redux-saga": "^1.2.2",
+    "redux-saga/effects": "*"
+  }
+}
