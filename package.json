@@ -5,7 +5,7 @@
   "main": "index.ts",
   "type": "module",
   "scripts": {
-    "dev": "npx vite",
+    "dev": "vite",
     "build": "tsc && vite build",
     "preview": "vite preview"
   },
@@ -13,6 +13,7 @@
     "eventemitter3": "^5.0.0",
     "lighterhtml": "^4.2.0",
     "redux-saga": "^1.2.2",
+    "typed-redux-saga": "^1.5.0",
     "typescript": "^4.9.3",
     "vite": "^4.2.0-beta.1"
   }

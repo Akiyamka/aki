@@ -1,0 +1,10 @@
+h1, h2 {
+  font-family: Lato;
+}
+
+.column {
+  display: flex;
+  flex-flow: column nowrap;
+  gap: 8px;
+  max-width: 300px;
+}
