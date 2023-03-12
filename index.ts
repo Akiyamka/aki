@@ -4,6 +4,7 @@ import { action, runSagas } from "./store";
 import "./style.css";
 import { Form } from "./view";
 
+console.log(test)
 const act = {
   showCountriesDropDown: action<Array<string>>("showCountriesDropDown"),
   showCitiesDropDown: action<Array<string>>("showCitiesDropDown"),
