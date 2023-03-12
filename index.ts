@@ -1,27 +1,26 @@
-import { call, put, fork, takeLatest } from 'redux-saga/effects';
-import { api } from './api';
-import { runSagas } from './store';
-import './style.css';
-import { Form } from './view';
+import { call, put, fork, takeLatest } from "redux-saga/effects";
+import { api } from "./api";
+import { action, runSagas } from "./store";
+import "./style.css";
+import { Form } from "./view";
 
 const act = {
-  showCountriesDropDown: <T>(payload: T) => ({
-    type: 'showCountriesDropDown',
-    payload,
-  }),
-  showCitiesDropDown: 'showCitiesDropDown',
-  showStreetsDropDown: 'showStreetsDropDown',
-  countriesLoaded: 'countriesLoaded',
-  citiesLoaded: 'citiesLoaded',
-  streetsLoaded: 'streetsLoaded',
+  showCountriesDropDown: action<Array<string>>("showCountriesDropDown"),
+  showCitiesDropDown: action<Array<string>>("showCitiesDropDown"),
+  showStreetsDropDown: action<Array<string>>("showStreetsDropDown"),
+  countriesLoaded: action<Array<string>>("countriesLoaded"),
+  citiesLoaded: action<Array<string>>("citiesLoaded"),
+  streetsLoaded: action<Array<string>>("streetsLoaded"),
 };
 
-function* rootSaga() {
-  yield takeLatest([act.showCountriesDropDown]);
+function* updateView() {
   Form({ countries: [1, 2, 3], cities: [], streets: [] });
 }
-runSagas(rootSaga);
 
+function* rootSaga() {
+  yield takeLatest([act.showCountriesDropDown], updateView);
+}
+runSagas(rootSaga);
 
 /**
  * Представим что у нас есть такая форма
