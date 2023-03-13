@@ -1,21 +1,12 @@
 import { call, put, fork, takeLatest, take, select } from 'typed-redux-saga';
 import { api } from './api';
-import { action, dispatch, runSagas, sel } from './store';
+import { action, dispatch, runSagas, sel, actions as storeActions } from './store';
 import { Form } from './view';
 
 const act = {
-  // to view
-  showCountriesDropDown: action<Array<string>>('showCountriesDropDown'),
-  showCitiesDropDown: action<Array<string>>('showCitiesDropDown'),
-  showStreetsDropDown: action<Array<string>>('showStreetsDropDown'),
-  // from view
   countrySelected: action<string>('countrySelected'),
   citySelected: action<string>('citySelected'),
   streetSelected: action<string>('streetSelected'),
-  // resources
-  countriesLoaded: action<Array<string>>('countriesLoaded'),
-  citiesLoaded: action<Array<string>>('citiesLoaded'),
-  streetsLoaded: action<Array<string>>('streetsLoaded'),
 };
 
 function* updateView() {
@@ -34,34 +25,27 @@ function* updateView() {
   const countries = yield* select(sel.countries);
   const cities = yield* select(sel.cities);
   const streets = yield* select(sel.streets);
-  console.log({ countries, cities, streets });
+
   Form({
     countries,
     cities,
     streets,
     onCountrySelect: (country) => {
-      console.log('🚀 ~ function*updateView ~ country:', country)
-      dispatch(act.countrySelected(country))
+      dispatch(act.countrySelected(country));
     },
     onCitySelect: (city) => {
-      // dispatch(act.citySelected(city)),
-
+      dispatch(act.citySelected(city));
     },
     onStreetSelect: (street) => {
-      // dispatch(act.citySelected(street))
-    }
-      
+      dispatch(act.streetSelected(street));
+    },
   });
-  
 }
 
 function* rootSaga() {
+  /* Feature - you can subscribe to multiple actions */
   yield* takeLatest(
-    [
-      act.showCountriesDropDown,
-      act.showCitiesDropDown,
-      act.showStreetsDropDown,
-    ],
+    Object.keys(storeActions),
     updateView
   );
   yield* fork(loadCountries);
@@ -70,21 +54,19 @@ function* rootSaga() {
   // - you must be very careful and write `yield*` instead of `yield` in sagas
   // - for avoid performance downgrade in better to use babel macro, so you also need babel with plugin
   // - be careful when you auto import saga effects, you must import them from `typed-redux-saga/macro` instead of `redux-saga/effects` or `typed-redux-saga`
-  const { payload: countries } = yield* take(act.countriesLoaded);
-  yield* put(act.showCountriesDropDown(countries));
 
   yield* takeLatest(act.countrySelected, function* ({ payload }) {
-    yield* fork(loadCities, payload);
-    const { payload: cities } = yield* take(act.citiesLoaded);
-    // yield* put(act.showCitiesDropDown(cities));
-    // yield takeLatest(act.citySelected, function* ({ payload }) {
-    //   yield* fork(loadStreets, payload);
-    //   const { payload: streets } = yield* take(act.streetsLoaded);
-    //   yield* put(act.showStreetsDropDown(streets));
-    //   yield* takeLatest(act.streetSelected, function* ({ payload: street }) {
-    //     console.log('street', street);
-    //   });
-    // });
+    // No auto batching mechanics - so you need create special actions that change multiple files at once
+    yield* put(storeActions.reset(null));
+    if (payload) {
+      yield* fork(loadCities, payload);
+    }
+    yield takeLatest(act.citySelected, function* ({ payload }) {
+      yield* fork(loadStreets, payload);
+      yield* takeLatest(act.streetSelected, function* ({ payload: street }) {
+        console.log('street', street);
+      });
+    });
   });
 }
 runSagas(rootSaga);
@@ -94,16 +76,15 @@ runSagas(rootSaga);
  */
 function* loadCountries() {
   const data = yield* call(api.getCountries);
-  yield put(act.countriesLoaded(data));
+  yield* put(storeActions.setCountries(data));
 }
 
 function* loadCities(country: string) {
-  debugger
   const data = yield* call(api.getCitiesForCountry, country);
-  yield put(act.citiesLoaded(data));
+  yield* put(storeActions.setCities(data));
 }
 
 function* loadStreets(city: string) {
   const data = yield* call(api.getStreetsForCity, city);
-  yield put(act.streetsLoaded(data));
+  yield* put(storeActions.setStreets(data));
 }

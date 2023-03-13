@@ -14,6 +14,7 @@ const Select = ({
   disabled=${options.length === 0}
   onchange="${onChange}"
 >
+  <option value="">Select ${name}</option>
   ${options.map((o) => html`<option value=${o}>${o}</option>`)}
 </select>`;
 
@@ -44,7 +45,6 @@ export function Form({
         name: 'country',
         options: countries ?? [],
         onChange: (e) => {
-          console.log('onChange')
           onCountrySelect(e.currentTarget.value)
         },
       })}

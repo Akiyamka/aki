@@ -1,23 +1,16 @@
 import { runSaga, Saga, stdChannel } from 'redux-saga';
-import { EventEmitter } from 'eventemitter3';
 
 const store = new Map([
   ['countries', new Array<string>()],
   ['cities', new Array<string>()],
   ['streets', new Array<string>()],
 ]);
-console.log('🚀 ~ store:', store);
-
-type UnionOfSingleKeyObjects<T extends object> = {
-  [K in keyof T]-?: { [P in K]: T[P] };
-}[keyof T];
-
-type ValueOf<T> = T[keyof T];
 
 export const actions = {
-  countriesLoaded: action<Array<string>>('countriesLoaded'),
-  citiesLoaded: action<Array<string>>('citiesLoaded'),
-  streetsLoaded: action<Array<string>>('streetsLoaded'),
+  setCountries: action<Array<string>>('setCountries'),
+  setCities: action<Array<string>>('setCities'),
+  setStreets: action<Array<string>>('setStreets'),
+  reset: action('reset')
 };
 
 export const sel = {
@@ -31,35 +24,37 @@ function reducer(
   store: Map<string, any>
 ) {
   switch (action.type) {
-    case actions.countriesLoaded.getType():
+    case actions.setCountries.getType():
       store.set('countries', action.payload);
       return;
 
-    case actions.citiesLoaded.getType():
+    case actions.setCities.getType():
       store.set('cities', action.payload);
       return;
 
-    case actions.streetsLoaded.getType():
+    case actions.setStreets.getType():
       store.set('streets', action.payload);
       return;
-  }
+
+    case actions.reset.getType():
+      store.set('cities', []);
+      store.set('streets', []);
+      return;
+}
 }
 const channel = stdChannel();
-const emitter = new EventEmitter();
 export const dispatch = (action: { type: string; payload: any }) => channel.put(action);
 
 export function runSagas(rootSaga: Saga<any[]>) {
 
-  emitter.on('saga-action', channel.put);
 
   const myIO = {
     // this will be used to orchestrate take and put Effects
     channel,
     // this will be used to resolve put Effects
-    dispatch(output: { type: string; payload: any }) {
-      debugger
-      reducer(output, store);
-     emitter.emit('saga-action', output);
+    dispatch(action: { type: string; payload: any }) {
+      reducer(action, store);
+      channel.put(action);
     },
     // this will be used to resolve select Effects
     getState() {
@@ -70,11 +65,20 @@ export function runSagas(rootSaga: Saga<any[]>) {
   runSaga(myIO, rootSaga);
 }
 
+
 export function action<K, T = string>(type: T) {
   const actionCreator = (payload: K) => ({
     type,
     payload,
   });
   actionCreator.getType = () => type;
+  /**
+   * Note: if the pattern function has toString defined on it,
+   * action.type will be tested against pattern.toString() instead.
+   * This is useful if you're using an action creator library
+   * like redux-act or redux-actions.
+   * https://redux-saga.js.org/docs/api#takepattern
+   */
+  actionCreator.toString = () => type;
   return actionCreator;
 }
