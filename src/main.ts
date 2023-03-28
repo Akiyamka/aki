@@ -1,13 +1,7 @@
-import { call, put, fork, takeLatest, take, select } from 'typed-redux-saga';
+import { call, put, fork, takeLatest, select } from 'typed-redux-saga';
 import { api } from './api';
-import { action, dispatch, runSagas, sel, actions as storeActions } from './store';
+import { dispatch, runSagas, sel, actions } from './store';
 import { Form } from './view';
-
-const act = {
-  countrySelected: action<string>('countrySelected'),
-  citySelected: action<string>('citySelected'),
-  streetSelected: action<string>('streetSelected'),
-};
 
 function* updateView() {
   // !Boilerplate - if you listen more that one event you must select values from store manually
@@ -25,19 +19,20 @@ function* updateView() {
   const countries = yield* select(sel.countries);
   const cities = yield* select(sel.cities);
   const streets = yield* select(sel.streets);
-
+  const selection = yield* select(sel.selection);
   Form({
+    selection,
     countries,
     cities,
     streets,
     onCountrySelect: (country) => {
-      dispatch(act.countrySelected(country));
+      dispatch(actions.countrySelected(country));
     },
     onCitySelect: (city) => {
-      dispatch(act.citySelected(city));
+      dispatch(actions.citySelected(city));
     },
     onStreetSelect: (street) => {
-      dispatch(act.streetSelected(street));
+      dispatch(actions.streetSelected(street));
     },
   });
 }
@@ -45,7 +40,7 @@ function* updateView() {
 function* rootSaga() {
   /* Feature - you can subscribe to multiple actions */
   yield* takeLatest(
-    Object.keys(storeActions),
+    Object.keys(actions),
     updateView
   );
   yield* fork(loadCountries);
@@ -55,15 +50,15 @@ function* rootSaga() {
   // - for avoid performance downgrade in better to use babel macro, so you also need babel with plugin
   // - be careful when you auto import saga effects, you must import them from `typed-redux-saga/macro` instead of `redux-saga/effects` or `typed-redux-saga`
 
-  yield* takeLatest(act.countrySelected, function* ({ payload }) {
-    // No auto batching mechanics - so you need create special actions that change multiple files at once
-    yield* put(storeActions.reset(null));
+  yield* takeLatest(actions.countrySelected, function* ({ payload }) {
+    // No auto batching mechanics - so you need create special actionsions that change multiple files at once
+    yield* put(actions.reset(null));
     if (payload) {
       yield* fork(loadCities, payload);
     }
-    yield takeLatest(act.citySelected, function* ({ payload }) {
+    yield takeLatest(actions.citySelected, function* ({ payload }) {
       yield* fork(loadStreets, payload);
-      yield* takeLatest(act.streetSelected, function* ({ payload: street }) {
+      yield* takeLatest(actions.streetSelected, function* ({ payload: street }) {
         console.log('street', street);
       });
     });
@@ -73,18 +68,23 @@ runSagas(rootSaga);
 
 /**
  * Resource loading sagas.
+ * TODO: Add canceling fetch
+ * https://github.com/redux-saga/redux-saga/issues/651#issuecomment-262375964
  */
 function* loadCountries() {
+  yield* put(actions.setCountriesLoading());
   const data = yield* call(api.getCountries);
-  yield* put(storeActions.setCountries(data));
+  yield* put(actions.setCountries(data));
 }
 
 function* loadCities(country: string) {
+  yield* put(actions.setCitiesLoading());
   const data = yield* call(api.getCitiesForCountry, country);
-  yield* put(storeActions.setCities(data));
+  yield* put(actions.setCities(data));
 }
 
 function* loadStreets(city: string) {
+  yield* put(actions.setStreetsLoading());
   const data = yield* call(api.getStreetsForCity, city);
-  yield* put(storeActions.setStreets(data));
+  yield* put(actions.setStreets(data));
 }

@@ -4,19 +4,41 @@ const store = new Map([
   ['countries', new Array<string>()],
   ['cities', new Array<string>()],
   ['streets', new Array<string>()],
+  [
+    'selection',
+    {
+      country: null,
+      city: null,
+      street: null,
+    },
+  ],
 ]);
+
+const addLoading = <T extends Object>(obj: T): T & { loading: boolean } => {
+  // @ts-ignore
+  obj.loading = true;
+  // @ts-ignore
+  return obj;
+};
 
 export const actions = {
   setCountries: action<Array<string>>('setCountries'),
+  setCountriesLoading: action('setCountriesLoading'),
+  countrySelected: action<string>('countrySelected'),
   setCities: action<Array<string>>('setCities'),
+  setCitiesLoading: action('setCitiesLoading'),
+  citySelected: action<string>('citySelected'),
   setStreets: action<Array<string>>('setStreets'),
-  reset: action('reset')
+  setStreetsLoading: action<Array<string>>('setStreetsLoading'),
+  streetSelected: action<string>('streetSelected'),
+  reset: action('reset'),
 };
 
 export const sel = {
   countries: () => store.get('countries')!,
   cities: () => store.get('cities')!,
   streets: () => store.get('streets')!,
+  selection: () => store.get('selection')!,
 };
 
 function reducer(
@@ -28,26 +50,57 @@ function reducer(
       store.set('countries', action.payload);
       return;
 
+    case actions.setCountriesLoading.getType():
+      store.set('countries', addLoading(new Array()));
+      return;
+
+    case actions.countrySelected.getType():
+      store.set('selection', {
+        ...(store.get('selection') ?? {}),
+        country: action.payload,
+      });
+      return;
+
     case actions.setCities.getType():
       store.set('cities', action.payload);
+      return;
+
+    case actions.setCitiesLoading.getType():
+      store.set('cities', addLoading(new Array()));
+      return;
+
+    case actions.citySelected.getType():
+      store.set('selection', {
+        ...(store.get('selection') ?? {}),
+        city: action.payload,
+      });
       return;
 
     case actions.setStreets.getType():
       store.set('streets', action.payload);
       return;
 
+    case actions.setStreetsLoading.getType():
+      store.set('streets', addLoading(new Array()));
+
+    case actions.streetSelected.getType():
+      store.set('selection', {
+        ...(store.get('selection') ?? {}),
+        street: action.payload,
+      });
+      return;
+
     case actions.reset.getType():
       store.set('cities', []);
       store.set('streets', []);
       return;
-}
+  }
 }
 const channel = stdChannel();
-export const dispatch = (action: { type: string; payload: any }) => channel.put(action);
+export const dispatch = (action: { type: string; payload: any }) =>
+  channel.put(action);
 
 export function runSagas(rootSaga: Saga<any[]>) {
-
-
   const myIO = {
     // this will be used to orchestrate take and put Effects
     channel,
@@ -64,7 +117,6 @@ export function runSagas(rootSaga: Saga<any[]>) {
 
   runSaga(myIO, rootSaga);
 }
-
 
 export function action<K, T = string>(type: T) {
   const actionCreator = (payload: K) => ({
