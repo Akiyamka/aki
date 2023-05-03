@@ -1,0 +1,1 @@
+export { greedy } from './greedy'

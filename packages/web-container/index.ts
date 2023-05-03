@@ -1,3 +1,3 @@
 export { webContainer } from './webContainer';
 export { asReactComponent } from './reactWrapper';
-export type { MountPointOptions } from './types';
+export type { WebContainerOptions as MountPointOptions } from './types';

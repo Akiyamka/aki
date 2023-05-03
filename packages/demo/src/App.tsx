@@ -1,8 +1,6 @@
 import type { PropsWithChildren } from 'react';
-/* MyButton.jsx */
 import { css } from 'vite-css-in-js';
 
-//Variable will contain the class name of the specified styles
 const sectionStyles = css`
   height: 100%;
   overflow: hidden;
@@ -11,10 +9,14 @@ const sectionStyles = css`
   flex-flow: column nowrap;
 `;
 
+const titleStyles = css`
+  margin: 1em;
+`;
+
 export function App({ children }: PropsWithChildren) {
   return (
     <section className={sectionStyles}>
-      <h1>Web container demo</h1>
+      <h1 className={titleStyles}>Web container demo</h1>
       {children}
     </section>
   );

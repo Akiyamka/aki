@@ -15,6 +15,7 @@
     "preview": "vite preview"
   },
   "dependencies": {
+    "nanoid": "^4.0.2",
     "p-defer": "^4.0.0",
     "typescript": "^5.0.3"
   },

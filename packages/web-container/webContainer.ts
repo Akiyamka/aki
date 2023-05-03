@@ -1,18 +1,35 @@
 import Deferred from 'p-defer';
-import type { MountPointOptions } from './types';
+import { nanoid } from 'nanoid';
+import type {
+  WebContainerOptions,
+  WebContainerOptionsWihDefaults,
+} from './types';
+import { adoptCss } from './adoptCss';
 
-const adoptCss = (css: string | CSSStyleSheet) => {
-  if (typeof css === 'string') {
-    const styleSheet = new CSSStyleSheet();
-    styleSheet.replaceSync(css);
-    return styleSheet;
-  }
-  return css;
-};
+function withDefaults(o: WebContainerOptions): WebContainerOptionsWihDefaults {
+  return {
+    componentName: o.componentName,
+    tagName: o.tagName ?? 'div',
+    classes: {
+      component: o.classes?.component ?? `_${nanoid(4)}`,
+      target: o.classes?.target ?? `_${nanoid(4)}`,
+    },
+    scopedCss: o.scopedCss ?? [],
+    shadowRootMode: o.shadowRootMode ?? 'closed',
+    plugins: o.plugins ?? [],
+  };
+}
 
-export function webContainer(options: MountPointOptions) {
+export function webContainer(rawOptions: WebContainerOptions) {
+  let options = withDefaults(rawOptions);
+  options.plugins.forEach((plugin) => {
+    if (plugin.pathOptions) {
+      options = plugin.pathOptions(options);
+    }
+  });
+
   const deferred = Deferred<true>();
-  const target = document.createElement(options.tagName ?? 'div');
+  const target = document.createElement(options.tagName);
   const wasMounted = deferred.promise;
 
   class WebContainer extends HTMLElement {
@@ -23,27 +40,26 @@ export function webContainer(options: MountPointOptions) {
 
     createCustomElement() {
       const shadowRoot = this.attachShadow({
-        mode: options.shadowRootMode ?? 'closed',
+        mode: options.shadowRootMode,
       });
 
-      options.classes?.target &&
-        target.setAttribute('class', options.classes.target);
+      target.setAttribute('class', options.classes.target);
 
-      if (options.scopedCss?.length) {
+      if (options.scopedCss.length) {
         shadowRoot.adoptedStyleSheets = options.scopedCss.map(adoptCss);
       }
       shadowRoot.appendChild(target);
 
-      if (options.unScopedCss?.length) {
-        document.adoptedStyleSheets = options.unScopedCss.map(adoptCss);
-      }
+      options.plugins.forEach((plugin) => {
+        if (plugin.hooks?.postCreate) {
+          plugin.hooks.postCreate(options);
+        }
+      });
     }
 
     connectedCallback() {
       if (this.isConnected) {
-        if (options.classes?.component) {
-          this.setAttribute('class', options.classes.component);
-        }
+        this.setAttribute('class', options.classes.component);
         deferred.resolve(true);
       }
     }
