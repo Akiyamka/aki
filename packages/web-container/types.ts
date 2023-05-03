@@ -1,4 +1,4 @@
-type WebContainerPlugin<S = any> = {
+type WebContainerPlugin = {
   version: 1;
   pathOptions?: (
     options: WebContainerOptionsWihDefaults
