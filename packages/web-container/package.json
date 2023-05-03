@@ -8,15 +8,15 @@
   "version": "0.0.1",
   "private": false,
   "type": "module",
-  "source": "index.ts",
-  "main": "./dist/index.cjs",
-  "module": "./dist/index.mjs",
-  "unpkg": "./dist/index.umd.js",
-  "types": "dist/index.d.ts",
+  "source": "./src/index.ts",
+  "main": "./lib/index.cjs",
+  "module": "./lib/index.mjs",
+  "unpkg": "./lib/index.umd.js",
+  "types": "./lib/index.d.ts",
   "exports": {
-    "types": "./dist/index.d.ts",
-    "require": "./dist/index.js",
-    "default": "./dist/index.mjs"
+    "types": "./lib/index.d.ts",
+    "require": "./lib/index.js",
+    "default": "./lib/index.mjs"
   },
   "scripts": {
     "test": "tsc",
