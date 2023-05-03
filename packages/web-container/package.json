@@ -7,13 +7,24 @@
   "license": "MIT",
   "version": "0.0.1",
   "private": false,
-  "main": "index.ts",
   "type": "module",
+  "source": "index.ts",
+  "main": "./dist/index.cjs",
+  "module": "./dist/index.mjs",
+  "unpkg": "./dist/index.umd.js",
+  "types": "dist/index.d.ts",
+  "exports": {
+    "types": "./dist/index.d.ts",
+    "require": "./dist/index.js",
+    "default": "./dist/index.mjs"
+  },
   "scripts": {
-    "build": "tsc",
-    "prepare": "pnpm build"
+    "test": "tsc",
+    "build": "microbundle",
+    "prepare": "pnpm --sequential test build"
   },
   "dependencies": {
+    "microbundle": "^0.15.1",
     "nanoid": "^4.0.2",
     "p-defer": "^4.0.0",
     "typescript": "^5.0.3"
