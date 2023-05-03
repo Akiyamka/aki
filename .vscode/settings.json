@@ -7,5 +7,9 @@
     "statusBarItem.remoteBackground": "#bb3e03",
     "statusBarItem.remoteForeground": "#e7e7e7"
   },
-  "peacock.color": "#bb3e03"
+  "peacock.color": "#bb3e03",
+  "cSpell.words": [
+    "akiyamka"
+  ],
+  "typescript.tsdk": "node_modules/typescript/lib"
 }

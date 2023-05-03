@@ -1,0 +1,27 @@
+{
+  "name": "@aki/web-container",
+  "author": {
+    "email": "akiyamka@gmail.com",
+    "name": "Alexandr Dubinin"
+  },
+  "license": "MIT",
+  "version": "0.0.1",
+  "private": true,
+  "main": "index.ts",
+  "type": "module",
+  "scripts": {
+    "dev": "vite",
+    "build": "tsc && vite build",
+    "preview": "vite preview"
+  },
+  "dependencies": {
+    "p-defer": "^4.0.0",
+    "typescript": "^5.0.3"
+  },
+  "devDependencies": {
+    "@types/react": "^18.2.0"
+  },
+  "peerDependencies": {
+    "react": "^18.2.0"
+  }
+}

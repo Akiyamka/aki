@@ -1,19 +1,21 @@
 {
-  "name": "redux-saga-sandbox",
+  "name": "aki",
+  "author": {
+    "email": "akiyamka@gmail.com",
+    "name": "Alexandr Dubinin"
+  },
+  "workspaces": [
+    "packages/*"
+  ],
+  "license": "MIT",
   "version": "0.0.0",
   "private": true,
   "main": "index.ts",
   "type": "module",
   "scripts": {
-    "dev": "vite",
-    "build": "tsc && vite build",
-    "preview": "vite preview"
+    "demo": "pnpm --filter @aki/demo dev"
   },
-  "dependencies": {
-    "lighterhtml": "^4.2.0",
-    "redux-saga": "^1.2.2",
-    "typed-redux-saga": "^1.5.0",
-    "typescript": "^4.9.3",
-    "vite": "^4.2.0-beta.1"
+  "devDependencies": {
+    "typescript": "^5.0.4"
   }
 }
