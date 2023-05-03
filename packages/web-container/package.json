@@ -9,22 +9,29 @@
   "private": false,
   "type": "module",
   "source": "./src/index.ts",
-  "main": "./lib/index.cjs",
-  "module": "./lib/index.mjs",
-  "unpkg": "./lib/index.umd.js",
-  "types": "./lib/index.d.ts",
+  "main": "lib/index.cjs.js",
+  "module": "lib/index.esm.mjs",
+  "unpkg": "lib/index.umd.min.js",
+  "types": "lib/index.d.ts",
   "exports": {
-    "types": "./lib/index.d.ts",
-    "require": "./lib/index.js",
-    "default": "./lib/index.mjs"
+    ".": {
+      "types": "./lib/index.d.ts",
+      "require": "./lib/index.js",
+      "import": "./lib/index.esm.mjs",
+      "default": "./lib/index.esm.mjs"
+    },
+    "./plugins/*": {
+      "types": "./lib/plugins/*.d.ts",
+      "require": "./lib/plugins*.js",
+      "import": "./lib/plugins/*.mjs",
+      "default": "./lib/plugins/*.mjs"
+    }
   },
   "scripts": {
     "test": "tsc",
-    "build": "microbundle",
-    "prepare": "pnpm --sequential test build"
+    "build": "microbundle ./src/**/*.ts"
   },
   "dependencies": {
-    "microbundle": "^0.15.1",
     "nanoid": "^4.0.2",
     "p-defer": "^4.0.0",
     "typescript": "^5.0.3"

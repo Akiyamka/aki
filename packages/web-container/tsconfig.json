@@ -1,4 +1,5 @@
 {
+  "include": ["src/plugins/*"],
   "compilerOptions": {
     "rootDir": "./src",
     "target": "ESNext",
@@ -14,6 +15,6 @@
     "noUnusedLocals": true,
     "noUnusedParameters": true,
     "noImplicitReturns": true,
-    "skipLibCheck": true
-  },
+    "skipLibCheck": true,
+  }
 }
