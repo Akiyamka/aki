@@ -15,7 +15,7 @@
   "main": "./dist/web-container.cjs",
   "module": "./dist/web-container.js",
   "unpkg": "./dist/web-container.umd.cjs",
-  "types": "./dist/web-container.d.ts",
+  "types": "./dist/index.d.ts",
   "exports": {
     ".": {
       "import": "./dist/web-container.js",
@@ -30,14 +30,13 @@
   },
   "scripts": {
     "test": "tsc",
-    "build": "vite build && vite build --config ./vite.config.plugins.ts"
+    "build": "vite build && tsc"
   },
   "dependencies": {
     "nanoid": "^4.0.2",
     "p-defer": "^4.0.0",
-    "typescript": "^5.0.3",
-    "vite": "^4.3.2",
-    "vite-plugin-dts": "^2.3.0"
+    "typescript": "^5.0.4",
+    "vite": "^4.3.2"
   },
   "devDependencies": {
     "@types/node": "^20.1.7",
