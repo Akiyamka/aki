@@ -1,7 +1,7 @@
 import mapGl from 'maplibre-gl';
 import mapGlCss from 'maplibre-gl/dist/maplibre-gl.css?inline';
 import { createRoot } from 'react-dom/client';
-import { webContainer, asReactComponent, greedy } from '@aki/web-container';
+import { webContainer, asReactComponent, greedy } from '@akiyamka/web-container';
 import { App } from './App';
 
 // TODO: Use import-attribute 'css' when proposal finished

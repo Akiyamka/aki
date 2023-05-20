@@ -10,7 +10,7 @@ importers:
 
   apps/demo:
     dependencies:
-      '@aki/web-container':
+      '@akiyamka/web-container':
         specifier: workspace:^0.0.1
         version: link:../../packages/web-container
       '@types/react':

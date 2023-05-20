@@ -1,5 +1,5 @@
 {
-  "name": "@aki/monorepo",
+  "name": "@akiyamka/monorepo",
   "author": {
     "email": "akiyamka@gmail.com",
     "name": "Alexandr Dubinin"
@@ -14,7 +14,7 @@
   "main": "index.ts",
   "type": "module",
   "scripts": {
-    "demo": "pnpm --filter @aki/demo dev"
+    "demo": "pnpm --filter @akiyamka/apps/demo dev"
   },
   "devDependencies": {
     "typescript": "^5.0.4"
