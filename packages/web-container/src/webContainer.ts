@@ -4,7 +4,7 @@ import type {
   WebContainerOptions,
   WebContainerOptionsWihDefaults,
 } from './types';
-import { adoptCss } from './adoptCss';
+import { parseCSSSheet } from './parseCSSSheet';
 
 function withDefaults(o: WebContainerOptions): WebContainerOptionsWihDefaults {
   return {
@@ -46,7 +46,7 @@ export function webContainer(rawOptions: WebContainerOptions) {
       target.setAttribute('class', options.classes.target);
 
       if (options.scopedCss.length) {
-        shadowRoot.adoptedStyleSheets = options.scopedCss.map(adoptCss);
+        shadowRoot.adoptedStyleSheets = options.scopedCss.map(parseCSSSheet);
       }
       shadowRoot.appendChild(target);
 

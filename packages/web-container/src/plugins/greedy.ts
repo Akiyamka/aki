@@ -1,4 +1,4 @@
-import { adoptCss } from '../adoptCss';
+import { parseCSSSheet } from '../parseCSSSheet';
 import { WebContainerOptionsWihDefaults } from '../types';
 
 export function greedy() {
@@ -16,7 +16,7 @@ export function greedy() {
         const unScopedCss = `.${options.classes.component} { overflow: hidden; flex: 1 }`;
         document.adoptedStyleSheets = [
           ...document.adoptedStyleSheets,
-          adoptCss(unScopedCss),
+          parseCSSSheet(unScopedCss),
         ];
       },
     },

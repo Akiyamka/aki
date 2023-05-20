@@ -1,4 +1,4 @@
-export const adoptCss = (css: string | CSSStyleSheet) => {
+export const parseCSSSheet = (css: string | CSSStyleSheet): CSSStyleSheet => {
   if (typeof css === 'string') {
     const styleSheet = new CSSStyleSheet();
     styleSheet.replaceSync(css);
