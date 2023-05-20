@@ -6,7 +6,7 @@
   },
   "license": "MIT",
   "version": "0.0.1",
-  "private": false,
+  "private": "false",
   "type": "module",
   "source": "./src/index.ts",
   "files": [
