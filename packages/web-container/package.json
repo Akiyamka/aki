@@ -29,7 +29,8 @@
   },
   "scripts": {
     "test": "tsc",
-    "build": "vite build && tsc"
+    "build": "vite build && tsc",
+    "release": "pnpm publish --access public"
   },
   "dependencies": {
     "nanoid": "^4.0.2",
