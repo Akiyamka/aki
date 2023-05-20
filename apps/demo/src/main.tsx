@@ -1,7 +1,7 @@
 import mapGl from 'maplibre-gl';
 import mapGlCss from 'maplibre-gl/dist/maplibre-gl.css?inline';
 import { createRoot } from 'react-dom/client';
-import { greedy } from '@aki/web-container/plugins/greedy';
+import { greedy } from '@aki/web-container/plugins';
 import { webContainer, asReactComponent } from '@aki/web-container';
 import { App } from './App';
 

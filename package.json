@@ -1,11 +1,12 @@
 {
-  "name": "aki",
+  "name": "@aki/monorepo",
   "author": {
     "email": "akiyamka@gmail.com",
     "name": "Alexandr Dubinin"
   },
   "workspaces": [
-    "packages/*"
+    "packages/*",
+    "apps/*"
   ],
   "license": "MIT",
   "version": "0.0.0",
