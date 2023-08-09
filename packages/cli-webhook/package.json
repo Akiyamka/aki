@@ -1,0 +1,44 @@
+{
+  "name": "@akiyamka/cli-webhook",
+  "author": {
+    "email": "akiyamka@gmail.com",
+    "name": "Alexandr Dubinin"
+  },
+  "license": "MIT",
+  "version": "0.0.1",
+  "type": "module",
+  "source": "./src/index.ts",
+  "files": [
+    "dist"
+  ],
+  "main": "./dist/cli-webhook.cjs",
+  "module": "./dist/cli-webhook.js",
+  "unpkg": "./dist/cli-webhook.umd.cjs",
+  "types": "./dist/index.d.ts",
+  "exports": {
+    ".": {
+      "import": "./dist/cli-webhook.js",
+      "require": "./dist/cli-webhook.umd.cjs",
+      "types": "./dist/index.d.ts"
+    }
+  },
+  "scripts": {
+    "test": "tsc",
+    "build": "vite build && tsc",
+    "dev": "vite dev",
+    "release": "pnpm publish --access public",
+    "bundle": "esbuild src/index.ts --bundle --outfile=cli-webhook.cjs --format=cjs --platform=node --target=node18 --banner:js="
+  },
+  "dependencies": {
+    "@liuli-util/vite-plugin-node": "^0.6.0",
+    "@types/args": "^5.0.0",
+    "args": "^5.0.3",
+    "esbuild": "^0.18.17",
+    "typescript": "^5.0.4",
+    "vite": "^4.3.2"
+  },
+  "devDependencies": {
+    "@types/node": "^20.1.7",
+    "nodemon": "^3.0.1"
+  }
+}
