@@ -1,5 +1,6 @@
 import type { PropsWithChildren } from 'react';
 import { css } from 'vite-css-in-js';
+import { PacksListView } from './LayersView';
 
 const sectionStyles = css`
   height: 100%;
@@ -18,6 +19,7 @@ export function App({ children }: PropsWithChildren) {
     <section className={sectionStyles}>
       <h1 className={titleStyles}>Web container demo</h1>
       {children}
+      <PacksListView />
     </section>
   );
 }

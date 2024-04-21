@@ -19,7 +19,7 @@ const container = webContainer({
 });
 
 /* Mount in container any you wish */
-const geoMap = new mapGl.Map({
+export const geoMap = new mapGl.Map({
   container: container.target,
   style: 'https://demotiles.maplibre.org/style.json',
   center: [0, 0],
